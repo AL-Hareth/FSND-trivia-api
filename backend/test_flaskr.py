@@ -33,6 +33,14 @@ class TriviaTestCase(unittest.TestCase):
     TODO
     Write at least one test for each test for successful operation and for expected errors.
     """
+
+    def test_get_categories(self):
+        res = self.client().get('/categories')
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(data['success'], True)
+
     def test_get_questions(self):
         res = self.client().get('/questions')
         data = json.loads(res.data)
@@ -50,6 +58,20 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual(res.status_code, 200)
         self.assertEqual(data['success'], True)
         self.assertTrue(data['total_questions'])
+
+    def test_get_questions_by_category(self):
+        res = self.client().get('/questions?current_category=1')
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(data['success'], True)
+
+    def test_get_questions_by_invalid_category(self):
+        res = self.client().get('/questions?current_category=10')
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 422)
+        self.assertEqual(data['success'], False)
 
     def test_delete_question(self):
         # Creating a question to delete it instade of deleting the question once and reqplce the id from the code again
@@ -83,13 +105,34 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual(res.status_code, 200)
         self.assertEqual(data['success'], True)
 
+    def test_create_invalid_question(self):
+        new_question = {
+            "question": "new question",
+            # Missing answer
+            "difficulty": 3,
+            "category": 1
+        }
+        res = self.client().post('/questions', json=new_question)
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 422)
+        self.assertEqual(data['success'], False)
+
     def test_search_question(self):
-        search_term = {"search_term": "Who"}
+        search_term = {"searchTerm": "Who"}
         res = self.client().post('/questions/search', json=search_term)
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 200)
         self.assertEqual(data['success'], True)
+
+    def test_search_question_404(self):
+        search_term = {"searchTerm": "who"}
+        res = self.client().post('/questions/search', json=search_term)
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 404)
+        self.assertEqual(data['success'], False)
 
     def test_play(self):
         req_body = {

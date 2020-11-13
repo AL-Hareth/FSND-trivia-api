@@ -62,37 +62,39 @@ def create_app(test_config=None):
 
   @app.route('/questions')
   def get_questions():
-    # Pagination
-    page = request.args.get('page', 1, type=int)
-    start = (page - 1) * QUESTIONS_PER_PAGE
-    end = start + QUESTIONS_PER_PAGE
-    # Fetch questions
-    questions = Question.query.all()
-    formatted_questions = [question.format() for question in questions]
-    # Fetch categories
-    categories = Category.query.all()
-    categories_names = []
-    for category in categories:
-      categories_names.append(category.type)
-    current_category = request.args.get('current_category', 0, type=int)
-    # Show question based on categories
-    if current_category > 6:
-      current_category = 0
-    if current_category != 0:
-      questions = Question.query.filter_by(category=(current_category)).all()
-    formatted_questions = [question.format() for question in questions]
-    questions_in_page = formatted_questions[start:end]
-    if page == 0 or questions_in_page == 0:
-        abort(404)
-    data = {
-        'success': True,
-        'questions': questions_in_page,
-        'total_questions': len(formatted_questions),
-        'current_category': current_category,
-        'categories': categories_names
-    }
-    return jsonify(data)
-
+    try:
+      # Pagination
+      page = request.args.get('page', 1, type=int)
+      start = (page - 1) * QUESTIONS_PER_PAGE
+      end = start + QUESTIONS_PER_PAGE
+      # Fetch questions
+      questions = Question.query.all()
+      formatted_questions = [question.format() for question in questions]
+      # Fetch categories
+      categories = Category.query.all()
+      categories_names = []
+      for category in categories:
+        categories_names.append(category.type)
+      current_category = request.args.get('current_category', 0, type=int)
+      # Show question based on categories
+      if current_category > 6:
+        abort(422)
+      if current_category != 0:
+        questions = Question.query.filter_by(category=(current_category)).all()
+      formatted_questions = [question.format() for question in questions]
+      questions_in_page = formatted_questions[start:end]
+      if page == 0 or questions_in_page == 0:
+          abort(404)
+      data = {
+          'success': True,
+          'questions': questions_in_page,
+          'total_questions': len(formatted_questions),
+          'current_category': current_category,
+          'categories': categories_names
+      }
+      return jsonify(data)
+    except Exception:
+      abort(422)
   '''
   @TODO: 
   Create an endpoint to DELETE question using a question ID. 
@@ -110,7 +112,7 @@ def create_app(test_config=None):
         'success': True,
         'message': 'deleted question {}'.format(question.id)
       })
-    except:
+    except Exception:
       abort(404)
 
   '''
@@ -141,7 +143,7 @@ def create_app(test_config=None):
       question.insert()
       body['success'] = True
       return jsonify(body)
-    except:
+    except Exception:
       abort(422)
 
   '''
@@ -157,13 +159,17 @@ def create_app(test_config=None):
 
   @app.route('/questions/search', methods=['POST'])
   def search_question():
-    search_term = request.get_json()['searchTerm']
-    questions = Question.query.filter(Question.question.contains(search_term)).all()
-    print(questions)
-    return jsonify({
-      "success": True,
-      "questions": [question.format() for question in questions]
-    })
+    try:
+      search_term = request.get_json()['searchTerm']
+      questions = Question.query.filter(Question.question.contains(search_term)).all()
+      if questions == []:
+        abort(404)
+      return jsonify({
+        "success": True,
+        "questions": [question.format() for question in questions]
+      })
+    except Exception:
+      abort(404)
 
   '''
     @TODO: 
@@ -215,7 +221,7 @@ def create_app(test_config=None):
           "difficulty": question.difficulty
         }
       })
-    except:
+    except Exception:
       abort(422)
 
   '''
