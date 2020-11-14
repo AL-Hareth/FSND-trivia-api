@@ -1,7 +1,7 @@
 # Full Stack Trivia API Backend
 
 ## Getting Started
-
+ 
 ### Installing Dependencies
 
 #### Python 3.7
