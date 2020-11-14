@@ -89,7 +89,115 @@ GET '/categories'
 
 ```
 
+##Documentation
+Get paginated questions (10 every page)
+```
+curl 127.0.0.1:5000:questions
+```
+Returns:
+```
+{
+          'success': True,
+          'questions': <list of 10 questions>,
+          'total_questions': <the total of all questions in the database>,
+          'current_category': <the current category which the questions are fetched from>,
+          'categories': <all categories' names>
+}
+```
 
+Get questions in specific page
+```
+curl 127.0.0.1:5000/questions?page=<page_number>
+```
+Returns:
+```
+{
+          'success': True,
+          'questions': <list of 10 questions in the second page>,
+          'total_questions': <the total of all questions in the database>,
+          'current_category': <the current category which the questions are fetched from>,
+          'categories': <all categories' names>
+}
+```
+
+Get questions by category
+```
+curl 127.0.0.1:5000/questions?current_category=<category_id>
+```
+Returns:
+```
+{
+          'success': True,
+          'questions': <list of 10 questions>,
+          'total_questions': <the total of all questions in this specific category of the database>,
+          'current_category': <the current category which the questions are fetched from>,
+          'categories': <all categories' names>
+}
+```
+
+Delete question by ID
+```
+curl -X DELETE 127.0.0.1:5000/questions/<question_id>
+```
+Returns:
+```
+{
+        'success': True,
+        'message': 'deleted question <question_id>'
+}
+```
+
+Create new question
+```
+curl -X POST -d {<json_data>} 127.0.0.1:5000/questions
+```
+<json_data> should contain: "question", "answer", "difficulty", "category"
+Returns:
+```
+{
+        'success': True,
+        'question': <inserted_question>,
+        'answer': <inserted_answer>,
+        'difficulty': <inserted_difficulty>,
+        'category': <inserted_category>
+}
+```
+
+Search a question by substring
+```
+curl -X POST -d {<json_data>} 127.0.0.1:5000/questions/search
+```
+<json_data> should contain the "searchTerm"
+Returns:
+```
+{
+        "success": True,
+        "questions": <list of questions that match the search term>
+}
+```
+
+Play the quiz game
+```
+curl -X POST -d {<category>, <previous_questions>} 127.0.0.1:5000/play
+```
+<category> contains: {"id": <category_id>, "type": <category_type>}
+<previous_questions> contains an Array of previous questions IDs
+Returns:
+ ```
+{
+        "success": True,
+        "question": {
+          "id": <question_id>,
+          "question": <question_question>,
+          "answer": <question_answer>,
+          "category": <question_category>,
+          "difficulty": <question_difficulty>
+        }
+}
+ ```
+
+
+```
 ## Testing
 To run the tests, run
 ```
