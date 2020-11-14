@@ -89,7 +89,8 @@ GET '/categories'
 
 ```
 
-##Documentation
+## Documentation
+
 Get paginated questions (10 every page)
 ```
 curl 127.0.0.1:5000:questions
