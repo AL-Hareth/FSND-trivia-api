@@ -91,6 +91,53 @@ GET '/categories'
 
 ## Documentation
 
+# Installing the project
+
+```
+git clone https://github.com/AL-Hareth/FSND-trivia-api.git
+```
+
+Then go to the cloned folder and start a virtual environment using:
+```
+pip install virtualenv
+virtualenv mypython
+```
+Now to activate the virtual environment:
+MacOS/Linux:
+```
+source mypython/bin/activate
+```
+Windows:
+```
+cd env/Scripts
+activate
+```
+
+In order to deactivate the environment:
+```
+deactivate
+```
+
+Now to run the flask app you have to install the dependenciese:
+```
+pip3 install -r requirments.txt
+```
+Set your app variables:
+MacOS/Linux:
+```
+export FLASK_APP=flaskr
+export FLASK_ENV=development
+flask run
+```
+Windows:
+```
+set FLASK_APP=flaskr
+set FLASK_ENV=development
+flask run
+```
+And now you're good to go.
+
+# Requests and Responses
 Get paginated questions (10 every page)
 ```
 curl 127.0.0.1:5000:questions
@@ -196,6 +243,14 @@ Returns:
         }
 }
  ```
+
+# The Errors Documentation:
+
+- 404 [Page not found]: This error code means that you're requesting an endpoint that doesn't exist.
+- 400 [Bad request]: The request contains invalid syntax.
+- 405 [Method not allowed]: It means you're using a method that is not supported for this particular endpoint.
+- 422 [Unproccessable entity]: Your request body has the correct syntax but it contains semantic errors.
+- 500 [Internal server error]: This error means that the Server can't handle the code.
 
 
 ```
