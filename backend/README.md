@@ -97,6 +97,11 @@ GET '/categories'
 git clone https://github.com/AL-Hareth/FSND-trivia-api.git
 ```
 
+setup the Database:
+```
+psql trivia < trivia.psql
+```
+
 Then go to the cloned folder and start a virtual environment using:
 ```
 pip install virtualenv
@@ -253,7 +258,7 @@ Returns:
 - 500 [Internal server error]: This error means that the Server can't handle the code.
 
 
-```
+
 ## Testing
 To run the tests, run
 ```
